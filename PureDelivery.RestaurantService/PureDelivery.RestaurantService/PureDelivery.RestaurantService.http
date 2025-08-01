@@ -1,0 +1,6 @@
+@PureDelivery.RestaurantService_HostAddress = http://localhost:5068
+
+GET {{PureDelivery.RestaurantService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

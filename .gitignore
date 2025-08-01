@@ -416,3 +416,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+PureDelivery.RestaurantService/PureDelivery.RestaurantService/configs/*.json
+!PureDelivery.RestaurantService/PureDelivery.RestaurantService/configs/*.example.json

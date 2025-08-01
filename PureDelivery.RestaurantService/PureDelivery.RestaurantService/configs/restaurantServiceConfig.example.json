@@ -1,0 +1,11 @@
+﻿{
+  "ConnectionString": "",
+  "Database": {
+    "CommandTimeout": 60,
+    "EnableRetryOnFailure": true,
+    "MaxRetryCount": 5,
+    "EnableSensitiveDataLogging": false,
+    "EnableDetailedErrors": false,
+    "MaxRetryDelay": 30
+  }
+}
