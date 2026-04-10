@@ -13,6 +13,7 @@ using Restaurant.Application.Services;
 using Restaurant.Application.Services.External;
 using Restaurant.Application.Services.External.impl;
 using Restaurant.Application.Services.impl;
+using Restaurant.Infrastructure.Repositories;
 using Restaurant.Application.Sorting;
 using Restaurant.Application.Sorting.impl;
 using Restaurant.Infrastructure.Repositories;
@@ -62,6 +63,11 @@ builder.Services.AddScoped<IRestaurantSortingService, RestaurantSortingService>(
 builder.Services.AddScoped<IRestaurantService, RestaurantServiceImpl>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 
+// Manager
+builder.Services.AddScoped<IRestaurantManagerRepository, RestaurantManagerRepository>();
+builder.Services.AddScoped<IIdentityServiceClient, IdentityServiceClient>();
+builder.Services.AddScoped<IRestaurantManagerService, RestaurantManagerService>();
+
 await IoCHelper.ConfigureDatabaseAsync(builder);
 
 
@@ -74,7 +80,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "PureDelivery Identity Service API",
         Version = "v1",
-        Description = "API для управления клиентами и аутентификацией",
+        Description = "API пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
         Contact = new()
         {
             Name = "PureDelivery Team",

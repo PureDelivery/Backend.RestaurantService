@@ -29,6 +29,7 @@ namespace RestaurantService.Infrastructure.Data
         public DbSet<MenuItemPopularity> MenuItemPopularities { get; set; } = null!;
         public DbSet<MenuItemOption> MenuItemOptions { get; set; } = null!;
         public DbSet<OptionChoice> OptionChoices { get; set; } = null!;
+        public DbSet<RestaurantManager> RestaurantManagers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +58,7 @@ namespace RestaurantService.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new MenuItemPopularityConfiguration());
             modelBuilder.ApplyConfiguration(new MenuItemOptionConfiguration());
             modelBuilder.ApplyConfiguration(new OptionChoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new RestaurantManagerConfiguration());
         }
 
         private static void ConfigureRelationships(ModelBuilder modelBuilder)
@@ -64,6 +66,17 @@ namespace RestaurantService.Infrastructure.Data
             ConfigureRestaurantRelationships(modelBuilder);
             ConfigureMenuRelationships(modelBuilder);
             ConfigureDeliveryRelationships(modelBuilder);
+            ConfigureManagerRelationships(modelBuilder);
+        }
+
+        private static void ConfigureManagerRelationships(ModelBuilder modelBuilder)
+        {
+            // Restaurant -> Managers (One-to-Many)
+            modelBuilder.Entity<RestaurantDomain>()
+                .HasMany<RestaurantManager>()
+                .WithOne(m => m.Restaurant)
+                .HasForeignKey(m => m.RestaurantId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         private static void ConfigureRestaurantRelationships(ModelBuilder modelBuilder)
