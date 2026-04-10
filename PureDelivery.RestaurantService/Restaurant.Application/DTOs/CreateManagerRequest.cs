@@ -21,5 +21,10 @@ namespace Restaurant.Application.DTOs
 
         [Required]
         public Guid RestaurantId { get; set; }
+
+        /// <summary>
+        /// Сделать этого менеджера главным (владельцем аккаунта ресторана).
+        /// </summary>
+        public bool IsOwner { get; set; } = false;
     }
 }

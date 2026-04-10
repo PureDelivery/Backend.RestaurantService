@@ -68,6 +68,16 @@ builder.Services.AddScoped<IRestaurantManagerRepository, RestaurantManagerReposi
 builder.Services.AddScoped<IIdentityServiceClient, IdentityServiceClient>();
 builder.Services.AddScoped<IRestaurantManagerService, RestaurantManagerService>();
 
+// Menu management
+builder.Services.AddScoped<IMenuManagementService, MenuManagementService>();
+
+// Restaurant management
+builder.Services.AddScoped<IRestaurantManagementRepository, RestaurantManagementRepository>();
+builder.Services.AddScoped<IRestaurantManagementService, RestaurantManagementService>();
+
+// Admin marketing
+builder.Services.AddScoped<IAdminMarketingService, AdminMarketingService>();
+
 await IoCHelper.ConfigureDatabaseAsync(builder);
 
 

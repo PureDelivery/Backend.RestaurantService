@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Application.Repositories;
 using RestaurantService.Domain.Entities;
 using RestaurantService.Domain.Enums;
@@ -14,6 +14,8 @@ public class MenuRepository : IMenuRepository
     {
         _context = context;
     }
+
+    // ── Customer-facing (only available items) ──────────────────────────────
 
     public async Task<List<MenuItem>> GetMenuItemsByRestaurantIdAsync(Guid restaurantId)
     {
@@ -35,29 +37,14 @@ public class MenuRepository : IMenuRepository
                                       mi.RestaurantId == restaurantId &&
                                       mi.IsAvailable);
 
-        if (menuItem == null)
-            return null;
+        if (menuItem == null) return null;
 
-        // Lazy loading для детального просмотра
-        await _context.Entry(menuItem)
-            .Reference(mi => mi.Nutrition)
-            .LoadAsync();
+        await _context.Entry(menuItem).Reference(mi => mi.Nutrition).LoadAsync();
+        await _context.Entry(menuItem).Reference(mi => mi.Popularity).LoadAsync();
+        await _context.Entry(menuItem).Collection(mi => mi.Options).LoadAsync();
 
-        await _context.Entry(menuItem)
-            .Reference(mi => mi.Popularity)
-            .LoadAsync();
-
-        await _context.Entry(menuItem)
-            .Collection(mi => mi.Options)
-            .LoadAsync();
-
-        // Загружаем choices для каждой опции
         foreach (var option in menuItem.Options)
-        {
-            await _context.Entry(option)
-                .Collection(o => o.Choices)
-                .LoadAsync();
-        }
+            await _context.Entry(option).Collection(o => o.Choices).LoadAsync();
 
         return menuItem;
     }
@@ -87,7 +74,116 @@ public class MenuRepository : IMenuRepository
             .ToListAsync();
     }
 
-    private bool HasMenuCategory(MenuCategory menuItemCategory, string categoryName)
+    public Task<List<MenuItem>> GetMenuItemsByIdsAsync(List<Guid> itemIds)
+    {
+        return _context.MenuItems
+            .Include(mi => mi.Options)
+                .ThenInclude(o => o.Choices)
+            .Where(mi => itemIds.Contains(mi.Id))
+            .ToListAsync();
+    }
+
+    // ── Management (all items including unavailable) ─────────────────────────
+
+    public async Task<List<MenuItem>> GetAllMenuItemsForManagementAsync(Guid restaurantId, CancellationToken ct = default)
+    {
+        return await _context.MenuItems
+            .Include(mi => mi.Options)
+                .ThenInclude(o => o.Choices)
+            .Where(mi => mi.RestaurantId == restaurantId)
+            .OrderBy(mi => mi.Category)
+            .ThenBy(mi => mi.Name)
+            .ToListAsync(ct);
+    }
+
+    public async Task<MenuItem?> GetMenuItemRawAsync(Guid restaurantId, Guid itemId, CancellationToken ct = default)
+    {
+        return await _context.MenuItems
+            .Include(mi => mi.Options)
+                .ThenInclude(o => o.Choices)
+            .FirstOrDefaultAsync(mi => mi.Id == itemId && mi.RestaurantId == restaurantId, ct);
+    }
+
+    public async Task<MenuItemOption?> GetOptionAsync(Guid itemId, Guid optionId, CancellationToken ct = default)
+    {
+        return await _context.MenuItemOptions
+            .Include(o => o.Choices)
+            .FirstOrDefaultAsync(o => o.Id == optionId && o.MenuItemId == itemId, ct);
+    }
+
+    public async Task<OptionChoice?> GetChoiceAsync(Guid optionId, Guid choiceId, CancellationToken ct = default)
+    {
+        return await _context.OptionChoices
+            .FirstOrDefaultAsync(c => c.Id == choiceId && c.OptionId == optionId, ct);
+    }
+
+    // ── Write: MenuItem ──────────────────────────────────────────────────────
+
+    public async Task<MenuItem> AddMenuItemAsync(MenuItem item, CancellationToken ct = default)
+    {
+        await _context.MenuItems.AddAsync(item, ct);
+        await _context.SaveChangesAsync(ct);
+        return item;
+    }
+
+    public async Task UpdateMenuItemAsync(MenuItem item, CancellationToken ct = default)
+    {
+        item.UpdatedAt = DateTime.UtcNow;
+        _context.MenuItems.Update(item);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task DeleteMenuItemAsync(MenuItem item, CancellationToken ct = default)
+    {
+        _context.MenuItems.Remove(item);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    // ── Write: MenuItemOption ────────────────────────────────────────────────
+
+    public async Task<MenuItemOption> AddOptionAsync(MenuItemOption option, CancellationToken ct = default)
+    {
+        await _context.MenuItemOptions.AddAsync(option, ct);
+        await _context.SaveChangesAsync(ct);
+        return option;
+    }
+
+    public async Task UpdateOptionAsync(MenuItemOption option, CancellationToken ct = default)
+    {
+        _context.MenuItemOptions.Update(option);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task DeleteOptionAsync(MenuItemOption option, CancellationToken ct = default)
+    {
+        _context.MenuItemOptions.Remove(option);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    // ── Write: OptionChoice ──────────────────────────────────────────────────
+
+    public async Task<OptionChoice> AddChoiceAsync(OptionChoice choice, CancellationToken ct = default)
+    {
+        await _context.OptionChoices.AddAsync(choice, ct);
+        await _context.SaveChangesAsync(ct);
+        return choice;
+    }
+
+    public async Task UpdateChoiceAsync(OptionChoice choice, CancellationToken ct = default)
+    {
+        _context.OptionChoices.Update(choice);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task DeleteChoiceAsync(OptionChoice choice, CancellationToken ct = default)
+    {
+        _context.OptionChoices.Remove(choice);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private static bool HasMenuCategory(MenuCategory menuItemCategory, string categoryName)
     {
         return categoryName switch
         {
@@ -109,18 +205,5 @@ public class MenuRepository : IMenuRepository
             "Dinner" => menuItemCategory == MenuCategory.Dinner,
             _ => false
         };
-    }
-
-    public Task<List<MenuItem>> GetMenuItemsByIdsAsync(List<Guid> itemIds)
-    {
-        var menuItems = _context
-            .MenuItems
-            .Include(mi => mi.Options)
-                .ThenInclude(o => o.Choices)
-            .Where(mi => itemIds.Contains(mi.Id))
-            .ToListAsync();
-
-        return menuItems;
-
     }
 }

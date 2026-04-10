@@ -51,7 +51,8 @@ namespace Restaurant.Application.Services.impl
                     FirstName = request.FirstName.Trim(),
                     LastName = request.LastName.Trim(),
                     Phone = request.Phone.Trim(),
-                    Email = request.Email.ToLower().Trim()
+                    Email = request.Email.ToLower().Trim(),
+                    IsOwner = request.IsOwner
                 };
 
                 await _repository.AddAsync(manager, ct);
@@ -146,6 +147,7 @@ namespace Restaurant.Application.Services.impl
             LastName = m.LastName,
             Phone = m.Phone,
             Email = m.Email,
+            IsOwner = m.IsOwner,
             IsActive = m.IsActive,
             CreatedAt = m.CreatedAt
         };

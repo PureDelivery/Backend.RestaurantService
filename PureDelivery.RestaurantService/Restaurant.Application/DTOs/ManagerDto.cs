@@ -10,6 +10,7 @@ namespace Restaurant.Application.DTOs
         public string FullName => $"{FirstName} {LastName}".Trim();
         public string Phone { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public bool IsOwner { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
     }

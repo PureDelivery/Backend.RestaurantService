@@ -16,6 +16,12 @@ namespace RestaurantService.Domain.Entities
         public string Phone { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Главный менеджер (владелец аккаунта ресторана).
+        /// Только он может управлять подписками и видеть маркетинговую аналитику.
+        /// </summary>
+        public bool IsOwner { get; set; } = false;
+
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

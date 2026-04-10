@@ -419,3 +419,9 @@ FodyWeavers.xsd
 
 PureDelivery.RestaurantService/PureDelivery.RestaurantService/configs/*.json
 !PureDelivery.RestaurantService/PureDelivery.RestaurantService/configs/*.example.json
+
+!**/configs/*example*
+**/configs/*
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.*.json

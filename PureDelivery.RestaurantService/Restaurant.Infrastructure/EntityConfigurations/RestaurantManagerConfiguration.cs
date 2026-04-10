@@ -18,6 +18,7 @@ namespace Restaurant.Infrastructure.EntityConfigurations
             builder.Property(e => e.Phone).HasMaxLength(20);
             builder.Property(e => e.Email).IsRequired().HasMaxLength(256);
 
+            builder.Property(e => e.IsOwner).IsRequired().HasDefaultValue(false);
             builder.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
             builder.Property(e => e.CreatedAt).IsRequired().HasDefaultValueSql("GETUTCDATE()");
 
