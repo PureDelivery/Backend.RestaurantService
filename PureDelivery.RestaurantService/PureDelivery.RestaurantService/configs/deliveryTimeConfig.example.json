@@ -1,0 +1,6 @@
+﻿{
+  "MinutesPerKilometer": 3.0,
+  "MinDeliveryMinutes": 10,
+  "MaxDeliveryMinutes": 45,
+  "DefaultDeliveryMinutes": 25
+}

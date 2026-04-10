@@ -1,0 +1,7 @@
+﻿{
+  "BaseUrl": "https://localhost:7239",
+  "Endpoints": {
+    "FilterRestaurantsByLocation": "/api/v1/location/matched-location-restaurants",
+    "CheckPointInZone": "/api/v1/location/check-point-in-zone"
+  }
+}

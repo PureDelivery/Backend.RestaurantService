@@ -11,8 +11,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantService.Domain", "RestaurantService.Domain\RestaurantService.Domain.csproj", "{240BAA38-C64A-44F0-A46F-6D1CE8D99EFC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Application", "Restaurant.Application\Restaurant.Application.csproj", "{E6043D6E-8F90-45B7-A87A-9BABAEABC243}"
+	ProjectSection(ProjectDependencies) = postProject
+		{240BAA38-C64A-44F0-A46F-6D1CE8D99EFC} = {240BAA38-C64A-44F0-A46F-6D1CE8D99EFC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Infrastructure", "Restaurant.Infrastructure\Restaurant.Infrastructure.csproj", "{496D4884-2F71-49C7-A104-A080F467A0CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E6043D6E-8F90-45B7-A87A-9BABAEABC243} = {E6043D6E-8F90-45B7-A87A-9BABAEABC243}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

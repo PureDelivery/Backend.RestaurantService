@@ -1,0 +1,5 @@
+﻿{
+  "SearchPriorityWeight": 0.4,
+  "DeliveryZonePriorityWeight": 0.3,
+  "DistanceWeight": 0.3
+}

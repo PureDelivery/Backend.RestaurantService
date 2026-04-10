@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PureDelivery.Shared.Contracts" Version="1.9.0" />
+    <PackageReference Include="PureDelivery.Common.Http" Version="1.1.1" />
+    <PackageReference Include="PureDelivery.Shared.Contracts" Version="3.0.6" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,7 @@
+﻿{
+  "timeoutSeconds": 30,
+  "userAgent": "PureDelivery-Restaurant/1.0",
+  "validateSslCertificates": true,
+  "maxRetryAttempts": 3,
+  "retryDelaySeconds": 1
+}
