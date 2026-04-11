@@ -283,6 +283,6 @@ public class RestaurantService : IRestaurantService
             throw RestaurantException.NotFound(restaurantId);
         }
 
-        return _mapper.MapToDetailDto(restaurant, null);
+        return _mapper.MapToDetailDto(restaurant);
     }
 }

@@ -54,7 +54,7 @@ namespace Restaurant.Application.Mappers.impl
             return restaurants.Select(r => MapToDto(r, locationResponse)).ToList();
         }
 
-        public RestaurantDetailDto MapToDetailDto(RestaurantDomain restaurant, FilterRestaurantsByLocationResponse locationResponse = null)
+        public RestaurantDetailDto MapToDetailDto(RestaurantDomain restaurant, FilterRestaurantsByLocationResponse locationResponse)
         {
             var deliveryInfo = locationResponse?.DeliverableRestaurants
                 .FirstOrDefault(dr => dr.RestaurantId == restaurant.Id);
@@ -114,6 +114,55 @@ namespace Restaurant.Application.Mappers.impl
             };
         }
 
+        public RestaurantDetailDto MapToDetailDto(RestaurantDomain restaurant)
+        {
+            return new RestaurantDetailDto
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                Description = restaurant.Description,
+                ImageUrl = restaurant.ImageUrl,
+                CuisineTypes = _enumConverter.ConvertCuisineTypes(restaurant.CuisineTypes),
+                Tags = _enumConverter.ConvertTags(restaurant.Tags),
+                AverageRating = CalculateAverageRating(restaurant),
+                ReviewCount = restaurant.Reviews.Count,
+                MinOrderAmount = restaurant.Settings.MinOrderAmount,
+                IsOpen = IsRestaurantOpen(restaurant),
+                IsFeatured = restaurant.Marketing?.IsFeatured ?? false,
+                ParticipatesInLoyalty = restaurant.Partnership.ParticipatesInLoyalty,
+                Address = new RestaurantAddressDto
+                {
+                    FullAddress = restaurant.Address.FullAddress,
+                    City = restaurant.Address.City,
+                    Latitude = restaurant.Address.Latitude,
+                    Longitude = restaurant.Address.Longitude
+                },
+                Settings = new RestaurantSettingsDto
+                {
+                    Phone = restaurant.Settings.Phone,
+                    Email = restaurant.Settings.Email,
+                    Website = restaurant.Settings.Website,
+                    AveragePreparationMinutes = restaurant.Settings.AveragePreparationMinutes,
+                    MaxPreparationMinutes = restaurant.Settings.MaxPreparationMinutes,
+                    AcceptPreOrders = restaurant.Settings.AcceptPreOrders,
+                    MaxPreOrderDays = restaurant.Settings.MaxPreOrderDays
+                },
+                WorkingHours = restaurant.WorkingHours.Select(wh => new WorkingHoursDto
+                {
+                    DayOfWeek = wh.DayOfWeek,
+                    OpenTime = wh.OpenTime,
+                    CloseTime = wh.CloseTime,
+                    IsClosed = wh.IsClosed
+                })
+                .OrderBy(x => (((double)x.DayOfWeek)))
+                .ToList(),
+                RestaurantReviews = restaurant.Reviews.Select(r => new RestaurantReviewDto
+                {
+                    Rating = r.Rating,
+                    Comment = r.Comment
+                }).ToList()
+            };
+        }
         private bool IsRestaurantOpen(RestaurantDomain restaurant)
         {
             var currentDateTime = DateTime.UtcNow;

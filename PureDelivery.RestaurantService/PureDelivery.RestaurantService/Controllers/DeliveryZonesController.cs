@@ -185,16 +185,56 @@ namespace RestaurantService.API.Controllers
             }
         }
 
+        // GET: api/deliveryzones/restaurant/{restaurantId}
+        // Получить все зоны для конкретного ресторана (для менеджера)
+        [HttpGet("restaurant/{restaurantId:guid}")]
+        public async Task<ActionResult<List<DeliveryZoneWithPointsDto>>> GetZonesByRestaurant(Guid restaurantId)
+        {
+            try
+            {
+                var zones = await _context.DeliveryZones
+                    .Include(z => z.Points.OrderBy(p => p.Order))
+                    .Include(z => z.Restaurant)
+                    .Where(z => z.RestaurantId == restaurantId)
+                    .ToListAsync();
+
+                var result = zones.Select(zone => new DeliveryZoneWithPointsDto
+                {
+                    Id = zone.Id,
+                    Name = zone.Name,
+                    RestaurantName = zone.Restaurant.Name,
+                    DeliveryFee = zone.DeliveryFee,
+                    MinOrderAmount = zone.MinOrderAmount,
+                    EstimatedDeliveryMinutes = zone.EstimatedDeliveryMinutes,
+                    IsActive = zone.IsActive,
+                    Priority = zone.Priority,
+                    Points = zone.Points.Select(p => new ZonePointDto
+                    {
+                        Id = p.Id,
+                        Order = p.Order,
+                        Latitude = p.Latitude,
+                        Longitude = p.Longitude
+                    }).ToList()
+                }).ToList();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving zones for restaurant: {ex.Message}");
+            }
+        }
+
         // GET: api/deliveryzones/restaurants
         // Получить список ресторанов для выбора
         [HttpGet("restaurants")]
-        public async Task<ActionResult<List<RestaurantDto>>> GetRestaurants()
+        public async Task<ActionResult<List<RestaurantDtoShort>>> GetRestaurants()
         {
             try
             {
                 var restaurants = await _context.Restaurants
                     .Where(r => r.IsActive)
-                    .Select(r => new RestaurantDto
+                    .Select(r => new RestaurantDtoShort
                     {
                         Id = r.Id,
                         Name = r.Name
@@ -278,7 +318,7 @@ namespace RestaurantService.API.Controllers
         public decimal Longitude { get; set; }
     }
 
-    public class RestaurantDto
+    public class RestaurantDtoShort
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;

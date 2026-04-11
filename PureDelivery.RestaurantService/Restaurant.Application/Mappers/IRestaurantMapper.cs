@@ -9,5 +9,6 @@ public interface IRestaurantMapper
     RestaurantDto MapToDto(RestaurantDomain restaurant, FilterRestaurantsByLocationResponse locationResponse);
     List<RestaurantDto> MapToDtos(IEnumerable<RestaurantDomain> restaurants,
            FilterRestaurantsByLocationResponse locationResponse);
+    RestaurantDetailDto MapToDetailDto(RestaurantDomain restaurant);
     RestaurantDetailDto MapToDetailDto(RestaurantDomain restaurantm, FilterRestaurantsByLocationResponse locationResponse);
 }
