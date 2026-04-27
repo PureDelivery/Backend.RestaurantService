@@ -22,7 +22,7 @@ namespace PureDelivery.RestaurantService.Controllers
         }
 
         /// <summary>
-        /// 1) Получение всех ресторанов с фильтрацией по локации
+        /// 1) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         /// </summary>
         [HttpPost("list")]
         public async Task<ActionResult<BaseResponse<PagedResult<RestaurantDto>>>> GetRestaurants(
@@ -48,7 +48,7 @@ namespace PureDelivery.RestaurantService.Controllers
         }
 
         /// <summary>
-        /// 2) Получение одного ресторана более детально
+        /// 2) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         /// </summary>
         [HttpPost("{restaurantId}")]
         public async Task<ActionResult<BaseResponse<RestaurantDetailDto>>> GetRestaurantDetail(
@@ -78,7 +78,7 @@ namespace PureDelivery.RestaurantService.Controllers
         }
 
         /// <summary>
-        /// 3) Поиск по ресторану (название)
+        /// 3) пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
         /// </summary>
         [HttpPost("search")]
         public async Task<ActionResult<BaseResponse<PagedResult<RestaurantDto>>>> SearchRestaurants(
@@ -104,7 +104,7 @@ namespace PureDelivery.RestaurantService.Controllers
         }
 
         /// <summary>
-        /// 4) Поиск по блюду (название) - показывать ресторан где есть это блюдо
+        /// 4) пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         /// </summary>
         [HttpPost("dishes/search")]
         public async Task<ActionResult<BaseResponse<PagedResult<RestaurantDto>>>> SearchDishes(
@@ -130,8 +130,8 @@ namespace PureDelivery.RestaurantService.Controllers
         }
 
         /// <summary>
-        /// 5) Универсальная фильтрация ресторанов по кухне и/или тегам
-        /// Можно передать только кухни, только теги, или и то и другое одновременно
+        /// 5) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ/пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+        /// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         /// </summary>
         [HttpPost("filter")]
         public async Task<ActionResult<BaseResponse<PagedResult<RestaurantDto>>>> FilterRestaurants(
@@ -139,7 +139,7 @@ namespace PureDelivery.RestaurantService.Controllers
         {
             try
             {
-                // Быстрая валидация на контроллере
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 if (request.Latitude == 0 || request.Longitude == 0)
                 {
                     return BadRequest(BaseResponse<PagedResult<RestaurantDto>>.Failure(
@@ -174,14 +174,33 @@ namespace PureDelivery.RestaurantService.Controllers
         }
 
         /// <summary>
-        /// 6) Получение базовой информации для внутренних сервисов (Snapshot)
+        /// 6) IDs СЂРµСЃС‚РѕСЂР°РЅС–РІ С‰Рѕ РґРѕСЃС‚Р°РІР»СЏСЋС‚СЊ РЅР° РґР°РЅСѓ Р»РѕРєР°С†С–СЋ (РґР»СЏ AI СЃРµСЂРІС–СЃСѓ)
+        /// </summary>
+        [HttpPost("ids-by-location")]
+        public async Task<ActionResult<BaseResponse<List<Guid>>>> GetRestaurantIdsByLocation(
+            [FromBody] GetRestaurantsRequest request)
+        {
+            try
+            {
+                var ids = await _restaurantService.GetRestaurantIdsByLocationAsync((double)request.Latitude, (double)request.Longitude);
+                return Ok(BaseResponse<List<Guid>>.Success(ids));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting restaurant IDs by location");
+                return StatusCode(500, BaseResponse<List<Guid>>.Failure("Internal server error"));
+            }
+        }
+
+        /// <summary>
+        /// 7) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (Snapshot)
         /// </summary>
         [HttpGet("{restaurantId}/internal")]
         public async Task<ActionResult<BaseResponse<RestaurantDetailDto>>> GetRestaurantInternal(Guid restaurantId)
         {
             try
             {
-                // Вызываем упрощенный метод сервиса без логики координат
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 var restaurant = await _restaurantService.GetRestaurantByIdAsync(restaurantId);
                 return Ok(BaseResponse<RestaurantDetailDto>.Success(restaurant));
             }

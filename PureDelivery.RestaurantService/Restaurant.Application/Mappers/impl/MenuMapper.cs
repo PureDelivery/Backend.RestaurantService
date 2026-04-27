@@ -1,11 +1,6 @@
-﻿using PureDelivery.Shared.Contracts.DTOs.Restaurants.Responses;
+﻿using PureDelivery.Shared.Contracts.Domain.Enums;
+using PureDelivery.Shared.Contracts.DTOs.Restaurants.Responses;
 using RestaurantService.Domain.Entities;
-using RestaurantService.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurant.Application.Mappers.impl
 {

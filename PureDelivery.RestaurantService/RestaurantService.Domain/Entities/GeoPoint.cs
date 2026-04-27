@@ -8,12 +8,12 @@ namespace RestaurantService.Domain.Entities
 {
     public class GeoPoint
     {
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         public GeoPoint() { }
 
-        public GeoPoint(decimal latitude, decimal longitude)
+        public GeoPoint(double latitude, double longitude)
         {
             Latitude = latitude;
             Longitude = longitude;

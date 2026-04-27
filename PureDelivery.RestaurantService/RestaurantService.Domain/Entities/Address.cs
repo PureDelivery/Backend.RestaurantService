@@ -17,8 +17,8 @@ namespace RestaurantService.Domain.Entities
         public string Street { get; set; } = string.Empty;
         public string Building { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         // Дополнительная информация
         public string? Landmark { get; set; } // "Рядом с метро"

@@ -1,5 +1,7 @@
+using MassTransit;
 using Microsoft.Extensions.Logging;
 using PureDelivery.Shared.Contracts.Domain.Models;
+using PureDelivery.Shared.Contracts.Events.Restaurant;
 using Restaurant.Application.DTOs.MenuManagement;
 using Restaurant.Application.Repositories;
 using RestaurantService.Domain.Entities;
@@ -10,11 +12,12 @@ namespace Restaurant.Application.Services.impl
     {
         private readonly IMenuRepository _menuRepository;
         private readonly ILogger<MenuManagementService> _logger;
-
-        public MenuManagementService(IMenuRepository menuRepository, ILogger<MenuManagementService> logger)
+        private readonly IPublishEndpoint _publishEndpoint;
+        public MenuManagementService(IMenuRepository menuRepository, ILogger<MenuManagementService> logger, IPublishEndpoint publishEndpoint)
         {
             _menuRepository = menuRepository;
             _logger = logger;
+            _publishEndpoint = publishEndpoint;
         }
 
         // ── MenuItem ──────────────────────────────────────────────────────────
@@ -64,11 +67,41 @@ namespace Restaurant.Application.Services.impl
                     Category = request.Category,
                     ImageUrl = request.ImageUrl.Trim(),
                     PreparationTimeMinutes = request.PreparationTimeMinutes,
-                    IsAvailable = request.IsAvailable
+                    IsAvailable = request.IsAvailable,
+                    Nutrition = new NutritionInfo
+                    {
+                        CaloriesPer100g = request.Nutrition.CaloriesPer100g,
+                        ProteinPer100g = request.Nutrition.ProteinPer100g,
+                        FatPer100g = request.Nutrition.FatPer100g,
+                        CarbsPer100g = request.Nutrition.CarbsPer100g,
+                        WeightGrams = request.Nutrition.WeightGrams,
+                        Allergens = request.Nutrition.Allergens,
+                        DietaryTags = request.Nutrition.DietaryTags,
+                    }
                 };
 
                 await _menuRepository.AddMenuItemAsync(item, ct);
                 _logger.LogInformation("Created menu item {ItemId} for restaurant {RestaurantId}", item.Id, restaurantId);
+
+                await _publishEndpoint.Publish(new NewMenuItemAddedEvent
+                {
+                    MenuItemId = item.Id,
+                    RestaurantId = restaurantId,
+                    Name = item.Name,
+                    Description = item.Description,
+                    Category = (int)item.Category,
+                    Price = item.Price,
+                    CaloriesPer100g = item.Nutrition.CaloriesPer100g,
+                    ProteinPer100g = item.Nutrition.ProteinPer100g,
+                    FatPer100g = item.Nutrition.FatPer100g,
+                    CarbsPer100g = item.Nutrition.CarbsPer100g,
+                    WeightGrams = item.Nutrition.WeightGrams,
+                    Allergens = (int)item.Nutrition.Allergens,
+                    DietaryTags = (int)item.Nutrition.DietaryTags,
+                    IsPopular = false,
+                    IsRecommended = false,
+                    ImageUrl = item.ImageUrl ?? string.Empty,
+                }, ct);
 
                 return BaseResponse<MenuItemManagementDto>.Success(ToDto(item));
             }

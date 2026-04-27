@@ -1,6 +1,4 @@
-﻿using RestaurantService.Domain.Enums;
-using System;
-using System.Collections.Generic;
+﻿using PureDelivery.Shared.Contracts.Domain.Enums;
 
 namespace RestaurantService.Domain.Entities
 {

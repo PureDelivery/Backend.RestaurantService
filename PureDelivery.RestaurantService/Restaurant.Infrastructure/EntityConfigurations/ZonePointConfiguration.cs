@@ -16,11 +16,11 @@ namespace Restaurant.Infrastructure.EntityConfigurations
             builder.HasKey(z => z.Id);
 
             builder.Property(z => z.Latitude)
-                .HasPrecision(10, 8)
+                .HasColumnType("float")
                 .IsRequired();
 
             builder.Property(z => z.Longitude)
-                .HasPrecision(11, 8)
+                .HasColumnType("float")
                 .IsRequired();
 
             builder.HasIndex(z => new { z.ZoneId, z.Order }).IsUnique();

@@ -1,10 +1,4 @@
-﻿using RestaurantService.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RestaurantService.Domain.Entities
 {
@@ -36,8 +30,8 @@ namespace RestaurantService.Domain.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid ZoneId { get; set; }
         public int Order { get; set; }
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         // Navigation Property
         public virtual DeliveryZone Zone { get; set; } = null!;

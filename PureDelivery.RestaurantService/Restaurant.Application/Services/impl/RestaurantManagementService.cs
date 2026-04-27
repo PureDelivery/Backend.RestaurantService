@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Logging;
+using PureDelivery.Shared.Contracts.Domain.Enums;
 using PureDelivery.Shared.Contracts.Domain.Models;
 using Restaurant.Application.DTOs.RestaurantManagement;
 using Restaurant.Application.Repositories;
 using RestaurantService.Domain.Entities;
-using RestaurantService.Domain.Enums;
 using RestaurantDomain = RestaurantService.Domain.Entities.Restaurant;
 
 namespace Restaurant.Application.Services.impl

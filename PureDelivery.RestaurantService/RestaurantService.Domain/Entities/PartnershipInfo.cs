@@ -1,11 +1,4 @@
-﻿using RestaurantService.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestaurantService.Domain.Entities
+﻿namespace RestaurantService.Domain.Entities
 {
     public class PartnershipInfo
     {
@@ -17,6 +10,7 @@ namespace RestaurantService.Domain.Entities
         // Финансовые условия
         public decimal CommissionRate { get; set; } // 0.15 = 15%
         public bool ParticipatesInLoyalty { get; set; } = false;
+        public decimal LoyaltyPointsRate { get; set; } = 0.05m; // 5% від суми замовлення → points
 
 
         // Контракт

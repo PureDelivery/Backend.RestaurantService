@@ -1,4 +1,4 @@
-using RestaurantService.Domain.Enums;
+using PureDelivery.Shared.Contracts.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Restaurant.Application.DTOs.MenuManagement
@@ -23,5 +23,19 @@ namespace Restaurant.Application.DTOs.MenuManagement
         public int PreparationTimeMinutes { get; set; }
 
         public bool IsAvailable { get; set; } = true;
+
+        [Required]
+        public CreateNutritionInfoRequest Nutrition { get; set; } = null!;
+    }
+
+    public class CreateNutritionInfoRequest
+    {
+        public int CaloriesPer100g { get; set; }
+        public decimal ProteinPer100g { get; set; }
+        public decimal FatPer100g { get; set; }
+        public decimal CarbsPer100g { get; set; }
+        public int WeightGrams { get; set; }
+        public Allergen Allergens { get; set; } = Allergen.None;
+        public DietaryTag DietaryTags { get; set; } = DietaryTag.None;
     }
 }

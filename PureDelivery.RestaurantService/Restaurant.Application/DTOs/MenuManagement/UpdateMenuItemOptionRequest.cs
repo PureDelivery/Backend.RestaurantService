@@ -1,4 +1,4 @@
-using RestaurantService.Domain.Enums;
+using PureDelivery.Shared.Contracts.Domain.Enums;
 
 namespace Restaurant.Application.DTOs.MenuManagement
 {

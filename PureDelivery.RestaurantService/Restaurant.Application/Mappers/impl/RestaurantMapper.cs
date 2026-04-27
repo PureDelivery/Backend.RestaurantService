@@ -1,7 +1,5 @@
 ﻿using PureDelivery.Shared.Contracts.DTOs.Location.Responses;
 using PureDelivery.Shared.Contracts.DTOs.Restaurants.Responses;
-using RestaurantService.Domain.Enums;
-using System.ComponentModel;
 using RestaurantDomain = RestaurantService.Domain.Entities.Restaurant;
 
 namespace Restaurant.Application.Mappers.impl
@@ -9,12 +7,10 @@ namespace Restaurant.Application.Mappers.impl
     public class RestaurantMapper : IRestaurantMapper
     {
         private readonly IEnumConverter _enumConverter;
-        private readonly IDeliveryTimeCalculator _deliveryTimeCalculator;
 
-        public RestaurantMapper(IEnumConverter enumConverter, IDeliveryTimeCalculator deliveryTimeCalculator)
+        public RestaurantMapper(IEnumConverter enumConverter)
         {
             _enumConverter = enumConverter;
-            _deliveryTimeCalculator = deliveryTimeCalculator;
         }
 
         public RestaurantDto MapToDto(
@@ -32,7 +28,7 @@ namespace Restaurant.Application.Mappers.impl
                 ImageUrl = restaurant.ImageUrl,
                 CuisineTypes = _enumConverter.ConvertCuisineTypes(restaurant.CuisineTypes),
                 Tags = _enumConverter.ConvertTags(restaurant.Tags),
-                Distance = deliveryInfo?.Distance ?? 0m,
+                Distance = deliveryInfo?.Distance ?? 0,
                 AverageRating = CalculateAverageRating(restaurant),
                 ReviewCount = restaurant.Reviews.Count,
                 EstimatedDeliveryMinutes = GetEstimatedDelivery(restaurant, deliveryInfo!),
@@ -42,6 +38,7 @@ namespace Restaurant.Application.Mappers.impl
                     deliveryInfo?.BestDeliveryZone?.MinOrderAmount ?? 0m),
                 IsFeatured = restaurant.Marketing?.IsFeatured ?? false,
                 ParticipatesInLoyalty = restaurant.Partnership.ParticipatesInLoyalty,
+                LoyaltyPointsRate = restaurant.Partnership.LoyaltyPointsRate,
                 Latitude = restaurant.Address.Latitude,
                 Longitude = restaurant.Address.Longitude
             };
@@ -75,11 +72,14 @@ namespace Restaurant.Application.Mappers.impl
                 AverageRating = CalculateAverageRating(restaurant),
                 ReviewCount = restaurant.Reviews.Count,
                 EstimatedDelivery = GetEstimatedDelivery(restaurant, deliveryInfo!),
-                DeliveryFee = GetDeliveryFee(deliveryInfo!),
-                MinOrderAmount = restaurant.Settings.MinOrderAmount,
+                DeliveryFee = deliveryInfo?.BestDeliveryZone?.DeliveryFee ?? GetDeliveryFee(deliveryInfo!),
+                MinOrderAmount = Math.Max(
+                    restaurant.Settings.MinOrderAmount,
+                    deliveryInfo?.BestDeliveryZone?.MinOrderAmount ?? 0m),
                 IsOpen = IsRestaurantOpen(restaurant),
                 IsFeatured = restaurant.Marketing?.IsFeatured ?? false,
                 ParticipatesInLoyalty = restaurant.Partnership.ParticipatesInLoyalty,
+                LoyaltyPointsRate = restaurant.Partnership.LoyaltyPointsRate,
                 Address = new RestaurantAddressDto
                 {
                     FullAddress = restaurant.Address.FullAddress,
@@ -130,6 +130,7 @@ namespace Restaurant.Application.Mappers.impl
                 IsOpen = IsRestaurantOpen(restaurant),
                 IsFeatured = restaurant.Marketing?.IsFeatured ?? false,
                 ParticipatesInLoyalty = restaurant.Partnership.ParticipatesInLoyalty,
+                LoyaltyPointsRate = restaurant.Partnership.LoyaltyPointsRate,
                 Address = new RestaurantAddressDto
                 {
                     FullAddress = restaurant.Address.FullAddress,
@@ -199,18 +200,16 @@ namespace Restaurant.Application.Mappers.impl
 
         private EstimatedDelivery GetEstimatedDelivery(RestaurantDomain restaurant, DeliverableRestaurant deliveryInfo)
         {
-            var baseDeliveryTime = _deliveryTimeCalculator.CalculateDeliveryTime(deliveryInfo.Distance);
+            var zoneDeliveryTime = deliveryInfo.BestDeliveryZone.EstimatedDeliveryMinutes;
 
             var minCookingTime = GetMinCookingTime(restaurant);
             var maxCookingTime = GetMaxCookingTime(restaurant);
 
-            var estimatedDelivery = new EstimatedDelivery()
+            return new EstimatedDelivery
             {
-                MinMinutes = baseDeliveryTime + minCookingTime,
-                MaxMinutes = baseDeliveryTime + maxCookingTime,
+                MinMinutes = zoneDeliveryTime + minCookingTime,
+                MaxMinutes = zoneDeliveryTime + maxCookingTime,
             };
-
-            return estimatedDelivery;
         }
 
         private int GetMinCookingTime(RestaurantDomain restaurant)

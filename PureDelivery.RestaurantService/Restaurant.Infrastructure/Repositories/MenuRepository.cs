@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using PureDelivery.Shared.Contracts.Domain.Enums;
 using Restaurant.Application.Repositories;
 using RestaurantService.Domain.Entities;
-using RestaurantService.Domain.Enums;
 using RestaurantService.Infrastructure.Data;
 
 namespace Restaurant.Infrastructure.Repositories;

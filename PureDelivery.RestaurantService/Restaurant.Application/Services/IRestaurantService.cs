@@ -17,5 +17,6 @@ namespace Restaurant.Application.Services
         Task<PagedResult<RestaurantDto>> SearchRestaurantsByDishAsync(SearchRestaurantByDishRequest request);
         Task<PagedResult<RestaurantDto>> FilterRestaurantsAsync(FilterRestaurantsRequest request);
         Task<RestaurantDetailDto> GetRestaurantByIdAsync(Guid restaurantId);
+        Task<List<Guid>> GetRestaurantIdsByLocationAsync(double latitude, double longitude);
     }
 }

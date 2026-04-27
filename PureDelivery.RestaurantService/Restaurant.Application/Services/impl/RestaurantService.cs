@@ -285,4 +285,25 @@ public class RestaurantService : IRestaurantService
 
         return _mapper.MapToDetailDto(restaurant);
     }
+
+    public async Task<List<Guid>> GetRestaurantIdsByLocationAsync(double latitude, double longitude)
+    {
+        try
+        {
+            var allRestaurants = await _restaurantRepository.GetRestaurantsDataAsync();
+
+            if (!allRestaurants.Any())
+                return [];
+
+            var fakeRequest = new GetRestaurantsRequest { Latitude = latitude, Longitude = longitude, Page = 1, PageSize = int.MaxValue };
+            var locationResponse = await _locationServiceClient.CallGetRestaurantsAvailableForLocation(allRestaurants, fakeRequest);
+
+            return locationResponse.DeliverableRestaurants.Select(dr => dr.RestaurantId).ToList();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting restaurant IDs by location ({Lat}, {Lng})", latitude, longitude);
+            return [];
+        }
+    }
 }

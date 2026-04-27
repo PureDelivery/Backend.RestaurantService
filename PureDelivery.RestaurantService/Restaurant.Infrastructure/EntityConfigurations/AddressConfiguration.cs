@@ -36,11 +36,11 @@ namespace Restaurant.Infrastructure.EntityConfigurations
                 .HasMaxLength(20);
 
             builder.Property(a => a.Latitude)
-                .HasPrecision(10, 8)
+                .HasColumnType("float")
                 .IsRequired();
 
             builder.Property(a => a.Longitude)
-                .HasPrecision(11, 8)
+                .HasColumnType("float")
                 .IsRequired();
 
             builder.Property(a => a.Landmark)

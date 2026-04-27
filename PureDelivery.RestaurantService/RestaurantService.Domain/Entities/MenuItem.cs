@@ -1,4 +1,4 @@
-﻿using RestaurantService.Domain.Enums;
+﻿using PureDelivery.Shared.Contracts.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

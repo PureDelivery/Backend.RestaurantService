@@ -297,8 +297,8 @@ namespace RestaurantService.API.Controllers
     {
         public Guid Id { get; set; }
         public int Order { get; set; }
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 
     public class CreateDeliveryZoneDto
@@ -314,8 +314,8 @@ namespace RestaurantService.API.Controllers
 
     public class CreateZonePointDto
     {
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 
     public class RestaurantDtoShort
